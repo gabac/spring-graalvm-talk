@@ -1,4 +1,4 @@
-name: Build and Deploy to Cloud Run
+name: Build and Deploy native-image to Cloud Run
 
 on:
   push:
@@ -8,8 +8,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.RUN_PROJECT }}
   RUN_REGION: europe-west6
-  SERVICE_NAME: talkapi
-  SERVICE_NAME_NATIVE: talkapi-native
+  SERVICE_NAME: talkapi-native
     
 jobs:
   setup-build-deploy:
@@ -49,14 +48,14 @@ jobs:
        
     - name: Push docker image native
       run: |-
-        docker push "gcr.io/$SERVICE_NAME_NATIVE/$IMAGE:latest"
+        docker push "gcr.io/$PROJECT_ID/$SERVICE_NAME:latest"
        
     # Deploy image to Cloud Run
     - name: Deploy native-image
       run: |-
-        gcloud run deploy "$SERVICE_NAME_NATIVE" \
+        gcloud run deploy "$SERVICE_NAME" \
           --quiet \
           --region "$RUN_REGION" \
-          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME_NATIVE:latest" \
+          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:latest" \
           --platform "managed" \
           --allow-unauthenticated
