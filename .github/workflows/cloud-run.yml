@@ -47,9 +47,8 @@ jobs:
     # Build and push image to Google Container Registry
     - name: Build
       run: |-
-        gcloud builds submit \
-          --quiet \
-          --tag "gcr.io/cyril-test-project/talkapi:latest"
+        pack build "$SERVICE_NAME" \
+        --builder gcr.io/buildpacks/builder:v1
           
     # Deploy image to Cloud Run
     - name: Deploy
