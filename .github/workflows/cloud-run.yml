@@ -43,22 +43,6 @@ jobs:
          path: ~/.m2
          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
          restore-keys: ${{ runner.os }}-m2     
-    
-    # Build and push image to Google Container Registry
-    - name: Build
-      run: |-
-        pack build "$SERVICE_NAME" \
-        --builder gcr.io/buildpacks/builder:v1
-          
-    # Deploy image to Cloud Run
-    - name: Deploy
-      run: |-
-        gcloud run deploy "$SERVICE_NAME" \
-          --quiet \
-          --region "$RUN_REGION" \
-          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:latest" \
-          --platform "managed" \
-          --allow-unauthenticated
        
     - name: Build with Maven (with GraalVM)
       run: mvn -B clean spring-boot:build-image --file talkapi-native/pom.xml
