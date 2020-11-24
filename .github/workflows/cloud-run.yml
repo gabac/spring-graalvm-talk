@@ -33,13 +33,13 @@ jobs:
         gcloud --quiet auth configure-docker
 
     - name: Set up JDK 11
-       uses: actions/setup-java@v1
-       with:
+      uses: actions/setup-java@v1
+      with:
          java-version: 11
          
     - name: Cache Maven packages
-       uses: actions/cache@v1
-       with:
+      uses: actions/cache@v1
+      with:
          path: ~/.m2
          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
          restore-keys: ${{ runner.os }}-m2     
@@ -62,10 +62,10 @@ jobs:
           --allow-unauthenticated
        
     - name: Build with Maven (with GraalVM)
-       run: mvn -B clean spring-boot:build-image --file talkapi-native/pom.xml
+      run: mvn -B clean spring-boot:build-image --file talkapi-native/pom.xml
        
     - name: Push docker image native
-       run: |-
+      run: |-
         docker push "gcr.io/$SERVICE_NAME_NATIVE/$IMAGE:latest"
        
     # Deploy image to Cloud Run
